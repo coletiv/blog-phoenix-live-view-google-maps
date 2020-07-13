@@ -14,6 +14,11 @@
 </section>
 
 <section class="row">
+  <div id="map" class="column">
+  </div>
+</section>
+
+<section class="row">
   <article class="column">
     <h2>Resources</h2>
     <ul>
@@ -46,3 +51,26 @@
     </ul>
   </article>
 </section>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=ADD_YOUR_API_KEY_HERE&callback=initMap&libraries=&v=weekly"
+  defer
+></script>
+
+<script>
+  (function(exports) {
+    "use strict";
+
+    function initMap() {
+      exports.map = new google.maps.Map(document.getElementById("map"), {
+        center: {
+          lat: -34.397,
+          lng: 150.644
+        },
+        zoom: 1
+      });
+    }
+
+    exports.initMap = initMap;
+  })((this.window = this.window || {}));
+</script>
