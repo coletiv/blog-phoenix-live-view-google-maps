@@ -2,18 +2,10 @@
   <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
   <p>Peace-of-mind from prototype to production</p>
 
-  <form phx-change="suggest" phx-submit="search">
-    <input type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
-    <datalist id="results">
-      <%= for {app, _vsn} <- @results do %>
-        <option value="<%= app %>"><%= app %></option>
-      <% end %>
-    </datalist>
-    <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
-  </form>
+  <button phx-click="add_random_sighting">Add sighting to the map</button>
 </section>
 
-<section class="row" phx-update="ignore">
+<section class="row" phx-update="ignore" phx-hook="MapSightingsHandler">
   <div id="map" class="column">
   </div>
 </section>
@@ -62,6 +54,7 @@
     "use strict";
 
     function initMap() {
+      // we store the google map object on the window so that hooks can later access it
       exports.map = new google.maps.Map(document.getElementById("map"), {
         center: {
           lat: -34.397,

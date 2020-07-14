@@ -3,37 +3,24 @@ defmodule LiveViewGoogleMapsWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+    {:ok, socket}
   end
 
   @impl true
-  def handle_event("suggest", %{"q" => query}, socket) do
-    {:noreply, assign(socket, results: search(query), query: query)}
+  def handle_event("add_random_sighting", _params, socket) do
+    random_sighting = generate_random_sighting()
+
+    # inform the browser / client that there is a new sighting
+    {:noreply, push_event(socket, "new_sighting", %{sighting: random_sighting})}
   end
 
-  @impl true
-  def handle_event("search", %{"q" => query}, socket) do
-    case search(query) do
-      %{^query => vsn} ->
-        {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
-
-      _ ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "No dependencies found matching \"#{query}\"")
-         |> assign(results: %{}, query: query)}
-    end
-  end
-
-  defp search(query) do
-    if not LiveViewGoogleMapsWeb.Endpoint.config(:code_reloader) do
-      raise "action disabled when not in development"
-    end
-
-    for {app, desc, vsn} <- Application.started_applications(),
-        app = to_string(app),
-        String.starts_with?(app, query) and not List.starts_with?(desc, ~c"ERTS"),
-        into: %{},
-        do: {app, vsn}
+  defp generate_random_sighting() do
+    # https://developers.google.com/maps/documentation/javascript/reference/coordinates
+    # Latitude ranges between -90 and 90 degrees, inclusive.
+    # Longitude ranges between -180 and 180 degrees, inclusive
+    %{
+      latitude: Enum.random(-90..90),
+      longitude: Enum.random(-180..180)
+    }
   end
 end
