@@ -7,12 +7,27 @@ defmodule LiveViewGoogleMapsWeb.PageLive do
   end
 
   @impl true
-  def handle_event("add_random_sighting", _params, socket) do
+  def handle_params(%{"hash" => hash, "action" => :add_random_sighting} , _params, _socket) do
     random_sighting = generate_random_sighting()
 
-    # inform the browser / client that there is a new sighting
-    {:noreply, push_event(socket, "new_sighting", %{sighting: random_sighting})}
+    # push the data to the genserver
+    LiveViewGoogleMapsWeb.Server.add(hash, random_sighting)
+    {:noreply, [], %{sighting: random_sighting}}
   end
+
+    def handle_params(%{"hash" => hash}, _uri, socket) do
+
+    socket = assign(socket, :new_sighting, LiveViewGoogleMapsWeb.Server.show(hash))
+    if connected?(socket), do: LiveViewGoogleMapsWeb.Maps.subscribe("LiveViewGoogleMapsWeb.Maps", hash)
+    {:noreply, socket}
+  end
+
+
+  def handle_info({_requesting_module, [:new_sighting, :updated], data}, socket) do
+    socket = assign(socket, :new_sighting, data)
+    {:noreply, socket}
+  end
+
 
   defp generate_random_sighting() do
     # https://developers.google.com/maps/documentation/javascript/reference/coordinates

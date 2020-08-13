@@ -11,6 +11,8 @@ defmodule LiveViewGoogleMaps.Application do
       LiveViewGoogleMapsWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: LiveViewGoogleMaps.PubSub},
+      # Start the Registry
+     {Registry, keys: :unique, name: :maps},
       # Start the Endpoint (http/https)
       LiveViewGoogleMapsWeb.Endpoint
       # Start a worker by calling: LiveViewGoogleMaps.Worker.start_link(arg)
