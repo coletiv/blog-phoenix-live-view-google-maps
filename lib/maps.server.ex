@@ -9,9 +9,7 @@ defmodule LiveViewGoogleMapsWeb.Server do
             data: []
 
 
-  @moduledoc """
-  The Server process for modeling a salesforce appointment.
-  """
+
 
   @doc """
   Show the state

@@ -1,10 +1,12 @@
 defmodule LiveViewGoogleMapsWeb.Maps do
   require Logger
 
+    @topic inspect(__MODULE__)
+
   defstruct hash: nil
 
   @moduledoc """
-  The Channel process for api audio.
+  The Channel process for map messages.
   """
 
   @doc """
@@ -15,7 +17,7 @@ defmodule LiveViewGoogleMapsWeb.Maps do
         iex> LiveViewGoogleMapsWeb.Maps.subscribe()
         [_]
   """
-  def subscribe(topic \\ "map") do
+  def subscribe(topic \\ @topic) do
     Phoenix.PubSub.subscribe(LiveViewGoogleMapsWeb.PubSub, topic)
   end
 
