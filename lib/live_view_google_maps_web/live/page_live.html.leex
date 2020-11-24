@@ -1,6 +1,6 @@
 <section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace-of-mind from prototype to production</p>
+  <h1>Sightings</h1>
+  <p>around the world</p>
 
   <button phx-click="add_random_sighting">Add sighting to the map</button>
 </section>
@@ -45,7 +45,7 @@
 </section>
 
 <script
-  src="https://maps.googleapis.com/maps/api/js?key=ADD_YOUR_API_KEY_HERE&callback=initMap&libraries=&v=weekly"
+  src="https://maps.googleapis.com/maps/api/js?key=<%= Application.get_env(:live_view_google_maps, LiveViewGoogleMapsWeb.Endpoint)[:api_key] %>&callback=initMap&libraries=&v=weekly"
   defer
 ></script>
 

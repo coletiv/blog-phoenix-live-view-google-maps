@@ -13,7 +13,8 @@ config :live_view_google_maps, LiveViewGoogleMapsWeb.Endpoint,
   secret_key_base: "64z8NQq29gm0mjhm8/5yWmGTAV7JqfWjGE3RZXgqI9jj1vfLkTOKsMJJlTV3ZUY1",
   render_errors: [view: LiveViewGoogleMapsWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: LiveViewGoogleMaps.PubSub,
-  live_view: [signing_salt: "SY69wEEb"]
+  live_view: [signing_salt: "SY69wEEb"],
+  api_key: "your google project credentials api key  - requires Maps JavaScript API"
 
 # Configures Elixir's Logger
 config :logger, :console,
