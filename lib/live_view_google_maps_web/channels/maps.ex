@@ -32,6 +32,11 @@ defmodule LiveViewGoogleMapsWeb.Maps do
     |> notify_subscribers([:sightings, :updated])
   end
 
+  def broadcast_one(params \\ {:error, "params are empty"}) do
+    params
+    |> notify_subscribers([:new_sighting, :created])
+  end
+
   defp notify_subscribers({:ok, result}, event) do
       Logger.info "notifying subscribers of : "<> @topic <> " " <> result
     Phoenix.PubSub.broadcast(LiveViewGoogleMaps.PubSub, @topic, {__MODULE__, event, result})

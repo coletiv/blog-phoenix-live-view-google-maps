@@ -30,6 +30,11 @@ defmodule LiveViewGoogleMapsWeb.PageLive do
     {:noreply, socket}
   end
 
+  def handle_info({_requesting_module, [:new_sighting, :created], data}, socket) do
+    socket = assign(socket, :new_sighting, data)
+    {:noreply, socket}
+  end
+
   defp generate_random_sighting() do
     %{
       latitude: Enum.random(-90..90),

@@ -61,7 +61,7 @@ defmodule LiveViewGoogleMapsWeb.Server do
     state = %{state|data: sightings}
 
 ## broadcast to subscribers
-    LiveViewGoogleMapsWeb.Maps.broadcast({:ok,sightings})
+    LiveViewGoogleMapsWeb.Maps.broadcast_one({:ok,sighting})
 
     {:noreply, state}
   end
