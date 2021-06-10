@@ -16,7 +16,7 @@ defmodule LiveViewGoogleMapsWeb.Maps do
         [_]
   """
   def subscribe(topic \\ @topic) do
-    Phoenix.PubSub.subscribe(LiveViewGoogleMapsWeb.PubSub, topic)
+    Phoenix.PubSub.subscribe(LiveViewGoogleMaps.PubSub, topic)
   end
 
   @doc """
@@ -34,7 +34,7 @@ defmodule LiveViewGoogleMapsWeb.Maps do
 
   defp notify_subscribers({:ok, result}, event) do
       Logger.info "notifying subscribers of : "<> @topic <> " " <> result
-    Phoenix.PubSub.broadcast(LiveViewGoogleMapsWeb.PubSub, @topic, {__MODULE__, event, result})
+    Phoenix.PubSub.broadcast(LiveViewGoogleMaps.PubSub, @topic, {__MODULE__, event, result})
     {:ok, result}
   end
 
