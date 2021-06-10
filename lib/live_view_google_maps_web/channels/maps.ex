@@ -3,8 +3,6 @@ defmodule LiveViewGoogleMapsWeb.Maps do
 
     @topic inspect(__MODULE__)
 
-  defstruct hash: nil
-
   @moduledoc """
   The Channel process for map messages.
   """
@@ -22,16 +20,16 @@ defmodule LiveViewGoogleMapsWeb.Maps do
   end
 
   @doc """
-  Push metrics to the topic/channel
+  Push params to the topic/channel
 
   ## Examples
 
   iex> LiveViewGoogleMapsWeb.Maps.metrics()
   [_]
   """
-  def new_sighting(params \\ {:error, "metrics are empty"}) do
+  def broadcast(params \\ {:error, "params are empty"}) do
     params
-    |> notify_subscribers([:new_sighting, :updated])
+    |> notify_subscribers([:sightings, :updated])
   end
 
   defp notify_subscribers({:ok, result}, event) do

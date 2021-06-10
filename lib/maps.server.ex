@@ -2,14 +2,9 @@ defmodule LiveViewGoogleMapsWeb.Server do
   use GenServer
   require Logger
 
-  @registry_name :maps
   @name __MODULE__
 
-  defstruct hash: nil,
-            data: []
-
-
-
+  defstruct data: []
 
   @doc """
   Show the state
@@ -19,9 +14,9 @@ defmodule LiveViewGoogleMapsWeb.Server do
   iex> LiveViewGoogleMapsWeb.Server.show()
   [_]
   """
-  def show(hash) do
+  def show() do
     try do
-      GenServer.call(via_tuple(hash), :show)
+      GenServer.call(@name, :show)
     catch
       :exit, _ -> {:error, "not found"}
     end
@@ -37,16 +32,16 @@ defmodule LiveViewGoogleMapsWeb.Server do
     }
   end
 
-  def start_link(args) do
-    GenServer.start_link(__MODULE__, args.data, name: via_tuple(args.data["Name"]))
+  def start_link([]) do
+    GenServer.start_link(__MODULE__, [], name: @name)
   end
+
 
   @doc false
   def init(data) do
 
     initial_state = %{
       data: %{
-        "Name" => data["Name"]
       }
     }
 
@@ -62,10 +57,11 @@ defmodule LiveViewGoogleMapsWeb.Server do
   @doc false
   def handle_cast({:add, sighting}, state) do
     sightings = state.data["sightings"] + sighting
-    Map.update(state.data, "sightings", sightings)
-    state = %{state|data: state.data}
 
-    LiveViewGoogleMapsWeb.Maps.new_sighting(sighting, nil, state.hash)
+    state = %{state|data: sightings}
+
+## broadcast to subscribers
+    LiveViewGoogleMapsWeb.Maps.broadcast({:ok,sightings})
 
     {:noreply, state}
   end
@@ -75,12 +71,8 @@ defmodule LiveViewGoogleMapsWeb.Server do
     {:reply, state, state}
   end
 
-  @doc false
-  def via_tuple(hash, registry \\ @registry_name) do
-    {:via, Registry, {registry, hash}}
-  end
 
-  def add(hash, sighting) do
-    GenServer.cast(via_tuple(hash), {:add, sighting})
+  def add(sighting) do
+    GenServer.cast(@name, {:add, sighting})
   end
 end
